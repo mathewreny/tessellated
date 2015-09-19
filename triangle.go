@@ -52,7 +52,7 @@ func (p point) String() string {
 
 type row []point
 
-func reset(x, y float64, r row) {
+func (r row) reset(x, y float64) {
 	n := len(r)
 	for i := 0; i < n; x, i = x+base, i+1 {
 		p := &r[i]
@@ -70,14 +70,14 @@ func Triangle(size Rect, w io.Writer) {
 
 	// Allocates even and odd rows only once per function call! Could use a sync.Pool
 	o := make(row, npo)
-	reset(xo, ystart, o)
+	o.reset(xo, ystart)
 	e := make(row, npe)
 
 	// Construct the triangles
 	for y, i := 0.0, 1; i < nr; y, i = y+height, i+1 {
 		if 0 == i%2 {
 			// Odd row
-			reset(xo, y, o)
+			o.reset(xo, y)
 			for j := 0; j < npe; j++ {
 				// Pointing up
 				opacity := maxopacity * random.Float64()
@@ -90,7 +90,7 @@ func Triangle(size Rect, w io.Writer) {
 			}
 		} else {
 			// Even row
-			reset(xe, y, e)
+			e.reset(xe, y)
 			for j := 0; j < npe; j++ {
 				// Pointing down
 				opacity := maxopacity * random.Float64()

@@ -20,11 +20,12 @@ const (
 
 	maxopacity = 0.15
 
-	svgprefix   = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="%dpx" height="%dpx" viewBox="0 0 %d %d" zoomAndPan="disable">`
-	svgtriangle = `<polygon points="%v %v %v" style="fill:#090909;opacity:%0.2f" />`
+	svgprefix   = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="%0.0fpx" height="%0.0fpx" viewBox="0 0 %0.0f %0.0f" zoomAndPan="disable"><defs><style type="text/css">polygon { fill: #090909 }</style></defs>`
+	svgtriangle = `<polygon points="%v %v %v" opacity="%0.3f" />`
+	svgsuffix   = `</svg>`
 )
 
-var random *math.Rand = rand.New(rand.NewSource(time.Now().Unix()))
+var random *rand.Rand = rand.New(rand.NewSource(time.Now().Unix()))
 
 type Rect struct {
 	Width, Height float64
@@ -41,11 +42,11 @@ func (p *point) randomize() {
 	p.Y += hypot * math.Sin(theta)
 }
 
-func (p *point) GoString() string {
+func (p point) GoString() string {
 	return p.String()
 }
 
-func (p *point) String() string {
+func (p point) String() string {
 	return fmt.Sprintf("%0.2f,%0.2f", p.X, p.Y)
 }
 
@@ -53,7 +54,7 @@ type row []point
 
 func reset(x, y float64, r row) {
 	n := len(r)
-	for i := 0; i < n; x, i += base, 1 {
+	for i := 0; i < n; x, i = x+base, i+1 {
 		p := &r[i]
 		p.X = x
 		p.Y = y
@@ -73,20 +74,32 @@ func Triangle(size Rect, w io.Writer) {
 	e := make(row, npe)
 
 	// Construct the triangles
-	for y, i := 0.0, 1; i < nr; y, i += height, 1 {
+	for y, i := 0.0, 1; i < nr; y, i = y+height, i+1 {
 		if 0 == i%2 {
 			// Odd row
 			reset(xo, y, o)
 			for j := 0; j < npe; j++ {
+				// Pointing up
 				opacity := maxopacity * random.Float64()
 				fmt.Fprintf(w, svgtriangle, e[j], o[j], o[j+1], opacity)
 			}
+			for j := 0; j < npe-1; j++ {
+				// Pointing down
+				opacity := maxopacity * random.Float64()
+				fmt.Fprintf(w, svgtriangle, e[j], e[j+1], o[j+1], opacity)
+			}
 		} else {
 			// Even row
-			reset(xe, y, &e)
+			reset(xe, y, e)
 			for j := 0; j < npe; j++ {
+				// Pointing down
 				opacity := maxopacity * random.Float64()
 				fmt.Fprintf(w, svgtriangle, o[j], o[j+1], e[j], opacity)
+			}
+			for j := 0; j < npe-1; j++ {
+				// Pointing up
+				opacity := maxopacity * random.Float64()
+				fmt.Fprintf(w, svgtriangle, o[j+1], e[j], e[j+1], opacity)
 			}
 		}
 	}

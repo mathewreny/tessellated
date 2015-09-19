@@ -70,6 +70,7 @@ func triangle(w http.ResponseWriter, r *http.Request) {
 	}
 	if width > 5120 || height > 2880 {
 		http.Error(w, "Maximum resolution via server is 5120x2880. Use the console client to generate larger images.", http.StatusBadRequest)
+		return
 	}
 
 	w.Header().Set("Content-Type", "image/svg+xml")

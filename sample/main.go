@@ -73,11 +73,12 @@ func triangle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "image/svg+xml")
-	w.Header().Set("Vary", "Accept-Encoding")
-	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	w.Header().Set("Pragma", "no-cache")
-	w.Header().Set("Expires", "0")
+	h := w.Header()
+	h.Set("Content-Type", "image/svg+xml")
+	h.Set("Vary", "Accept-Encoding")
+	h.Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	h.Set("Pragma", "no-cache")
+	h.Set("Expires", "0")
 	tessellated.Triangle(tessellated.Rect{float64(width), float64(height)}, w)
 	fmt.Printf("Triangle background of size %d, %d took %v\n", width, height, time.Since(t))
 }

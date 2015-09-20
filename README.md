@@ -6,7 +6,7 @@ It's written in go and is used on my website http://reny.io
 To use tessellated as a library, simply call the Triangle function and pass in an io.Writer.  
 In the future I plan on creating a rectangle and Hexagon method.
 
-    tessellated.Triangle(os.Stdout, 1920, 1200)
+    tessellated.Triangle(os.Stdout, 1920.0, 1200.0)
 
 
 # Command Line

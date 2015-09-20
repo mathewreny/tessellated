@@ -27,10 +27,6 @@ const (
 
 var random *rand.Rand = rand.New(rand.NewSource(time.Now().Unix()))
 
-type Rect struct {
-	Width, Height float64
-}
-
 type point struct {
 	X, Y float64
 }
@@ -62,11 +58,13 @@ func (r row) reset(x, y float64) {
 	}
 }
 
-func Triangle(size Rect, w io.Writer) {
-	fmt.Fprintf(w, svgprefix, size.Width, size.Height, size.Width, size.Height)
-	nr := 3 + int(math.Ceil(size.Height/height)) // Number of rows of points
-	npo := 3 + int(math.Ceil(size.Width/base))   // Number of points in an odd row
-	npe := 2 + int(math.Ceil(size.Width/base))   // Number of points in an even row
+// Creates an svg triangle tessellation image using the provided width and height (length)
+// Output is written to the provided io.Writer
+func Triangle(w io.Writer, length, width float64) {
+	fmt.Fprintf(w, svgprefix, width, length, width, length)
+	nr := 3 + int(math.Ceil(length/height)) // Number of rows of points
+	npo := 3 + int(math.Ceil(width/base))   // Number of points in an odd row
+	npe := 2 + int(math.Ceil(width/base))   // Number of points in an even row
 
 	// Allocates even and odd rows only once per function call! Could use a sync.Pool
 	o := make(row, npo)

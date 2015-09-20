@@ -30,7 +30,7 @@ func main() {
 
 	if -1 == port {
 		var p Printer
-		tessellated.Triangle(tessellated.Rect{Width, Height}, p)
+		tessellated.Triangle(p, Height, Width)
 	}
 
 	if 65535 < port || port < 0 {
@@ -79,6 +79,6 @@ func triangle(w http.ResponseWriter, r *http.Request) {
 	h.Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	h.Set("Pragma", "no-cache")
 	h.Set("Expires", "0")
-	tessellated.Triangle(tessellated.Rect{float64(width), float64(height)}, w)
+	tessellated.Triangle(w, float64(height), float64(width))
 	fmt.Printf("Triangle background of size %d, %d took %v\n", width, height, time.Since(t))
 }

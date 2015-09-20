@@ -9,12 +9,12 @@ import (
 )
 
 const (
-	base   = 100.0
-	height = base * 1.732050808 * 0.5 // base * (sqrt(3)/2)
-	radius = base * 0.35              // should be strictly smaller than (base * 0.5)
-	circle = 2.0 * math.Pi
+	base    = 100.0
+	tHeight = base * 1.732050808 * 0.5 // base * (sqrt(3)/2)
+	radius  = base * 0.35              // should be strictly smaller than (base * 0.5)
+	circle  = 2.0 * math.Pi
 
-	ystart = 0.0 - height
+	ystart = 0.0 - tHeight
 	xo     = 0.0 - base     // Where every odd row starts in the x direction.
 	xe     = 0.0 - base*0.5 // Where every even row starts in the x direction.
 
@@ -58,13 +58,13 @@ func (r row) reset(x, y float64) {
 	}
 }
 
-// Creates an svg triangle tessellation image using the provided width and height (length)
+// Creates an svg triangle tessellation image using the provided width and height
 // Output is written to the provided io.Writer
-func Triangle(w io.Writer, length, width float64) {
-	fmt.Fprintf(w, svgprefix, width, length, width, length)
-	nr := 3 + int(math.Ceil(length/height)) // Number of rows of points
-	npo := 3 + int(math.Ceil(width/base))   // Number of points in an odd row
-	npe := 2 + int(math.Ceil(width/base))   // Number of points in an even row
+func Triangle(w io.Writer, width, height float64) {
+	fmt.Fprintf(w, svgprefix, width, height, width, height)
+	nr := 3 + int(math.Ceil(height/tHeight)) // Number of rows of points
+	npo := 3 + int(math.Ceil(width/base))    // Number of points in an odd row
+	npe := 2 + int(math.Ceil(width/base))    // Number of points in an even row
 
 	// Allocates even and odd rows only once per function call! Could use a sync.Pool
 	o := make(row, npo)
@@ -72,7 +72,7 @@ func Triangle(w io.Writer, length, width float64) {
 	e := make(row, npe)
 
 	// Construct the triangles
-	for y, i := 0.0, 1; i < nr; y, i = y+height, i+1 {
+	for y, i := 0.0, 1; i < nr; y, i = y+tHeight, i+1 {
 		if 0 == i%2 {
 			// Odd row
 			o.reset(xo, y)

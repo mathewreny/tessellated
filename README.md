@@ -26,3 +26,8 @@ then in your browser visit
 
 where width and height are integers `0 < width <= 5120` and `0 < height <= 2880`.
 The width and height must be provided
+
+
+# Sample Generated Image
+
+![Generated Image](https://cdn.rawgit.com/mathewreny/tessellated/master/sample/triangle.svg)

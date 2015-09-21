@@ -30,4 +30,4 @@ The width and height must be provided
 
 # Sample Generated Image
 
-![Generated Image](https://cdn.rawgit.com/mathewreny/tessellated/master/sample/triangle.svg)
+![Sample Image](https://rawgit.com/mathewreny/tessellated/master/sample/triangle.svg "Generated Image Using Tessellated")

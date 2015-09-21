@@ -31,6 +31,7 @@ func main() {
 	if -1 == port {
 		var p Printer
 		tessellated.Triangle(p, Width, Height)
+		return
 	}
 
 	if 65535 < port || port < 0 {
